@@ -28,7 +28,7 @@ function dHexDump (bytes) {
     arr.push((bytes[i] < 16 ? '0' : '') + bytes[i].toString(16));
   }
 
-  console.log(arr.join(''));
+  //console.log(arr.join(''));
 }
 
 function bytesToHex (bytes) {
@@ -196,9 +196,9 @@ function uintToInt (val) {
 }
 
 function sha1Hash (bytes) {
-  // console.log('SHA-1 hash start');
+  // //console.log('SHA-1 hash start');
   var hashBytes = sha1.hash(bytes, true);
-  // console.log('SHA-1 hash finish');
+  // //console.log('SHA-1 hash finish');
 
   return hashBytes;
 }
@@ -214,20 +214,20 @@ function rsaEncrypt (publicKey, bytes) {
     bytes = bytes.concat(padding);
   }
 
-  // console.log('RSA encrypt start');
+  // //console.log('RSA encrypt start');
   var N = new BigInteger(publicKey.modulus, 16),
       E = new BigInteger(publicKey.exponent, 16),
       X = new BigInteger(bytes),
       encryptedBigInt = X.modPowInt(E, N),
       encryptedBytes  = bytesFromBigInt(encryptedBigInt, 256);
 
-  // console.log('RSA encrypt finish');
+  // //console.log('RSA encrypt finish');
 
   return encryptedBytes;
 }
 
 function aesEncrypt (bytes, keyBytes, ivBytes) {
-  // console.log('AES encrypt start', bytes.length/*, bytesToHex(keyBytes), bytesToHex(ivBytes)*/);
+  // //console.log('AES encrypt start', bytes.length/*, bytesToHex(keyBytes), bytesToHex(ivBytes)*/);
 
   var needPadding = 16 - (bytes.length % 16);
   if (needPadding > 0 && needPadding < 16) {
@@ -245,13 +245,13 @@ function aesEncrypt (bytes, keyBytes, ivBytes) {
 
   var encryptedBytes = bytesFromWords(encryptedWords);
 
-  // console.log('AES encrypt finish');
+  // //console.log('AES encrypt finish');
 
   return encryptedBytes;
 }
 
 function aesDecrypt (encryptedBytes, keyBytes, ivBytes) {
-  // console.log('AES decrypt start', encryptedBytes.length/*, bytesToHex(keyBytes), bytesToHex(ivBytes)*/);
+  // //console.log('AES decrypt start', encryptedBytes.length/*, bytesToHex(keyBytes), bytesToHex(ivBytes)*/);
 
   var decryptedWords = CryptoJS.AES.decrypt({ciphertext: bytesToWords(encryptedBytes)}, bytesToWords(keyBytes), {
     iv: bytesToWords(ivBytes),
@@ -261,15 +261,15 @@ function aesDecrypt (encryptedBytes, keyBytes, ivBytes) {
 
   var bytes = bytesFromWords(decryptedWords);
 
-  // console.log('AES decrypt finish');
+  // //console.log('AES decrypt finish');
 
   return bytes;
 }
 
 function gzipUncompress (bytes) {
-  // console.log('Gzip uncompress start');
+  // //console.log('Gzip uncompress start');
   var result = (new Zlib.Gunzip(bytes)).decompress();
-  // console.log('Gzip uncompress finish');
+  // //console.log('Gzip uncompress finish');
   return result;
 }
 
@@ -289,33 +289,33 @@ function pqPrimeFactorization (pqBytes) {
   var what = new BigInteger(pqBytes), 
       result = false;
 
-  console.log('PQ start', pqBytes, what.bitLength());
+  ////console.log('PQ start', pqBytes, what.bitLength());
 
   try {
     result = pqPrimeLeemon(str2bigInt(what.toString(16), 16, Math.ceil(64 / bpe) + 1))
   } catch (e) {
-    console.error(e);
-    console.error('Pq leemon Exception', e);
+    //console.error(e);
+    //console.error('Pq leemon Exception', e);
   }
 
   if (result === false && what.bitLength() <= 64) {
-    // console.time('PQ long');
+    // //console.time('PQ long');
     try {
       result = pqPrimeLong(goog.math.Long.fromString(what.toString(16), 16));
     } catch (e) {
-      console.error('Pq long Exception', e);
+      //console.error('Pq long Exception', e);
     };
-    // console.timeEnd('PQ long');
+    // //console.timeEnd('PQ long');
   }
-  // console.log(result);
+  // //console.log(result);
 
   if (result === false) {
-    // console.time('pq BigInt');
+    // //console.time('pq BigInt');
     result = pqPrimeBigInteger(what);
-    // console.timeEnd('pq BigInt');
+    // //console.timeEnd('pq BigInt');
   }
 
-  console.log('PQ finish');
+  //console.log('PQ finish');
 
   return result;
 }
@@ -521,7 +521,7 @@ function pqPrimeLeemon (what) {
     Q = x;
   }
 
-  // console.log(dT(), 'done', bigInt2str(what, 10), bigInt2str(P, 10), bigInt2str(Q, 10));
+  // //console.log(dT(), 'done', bigInt2str(what, 10), bigInt2str(P, 10), bigInt2str(Q, 10));
 
   return [bytesFromLeemonBigInt(P), bytesFromLeemonBigInt(Q)];
 }
